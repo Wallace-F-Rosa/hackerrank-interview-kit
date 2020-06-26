@@ -4,14 +4,14 @@ using namespace std;
 
 bool isAnagram(int s1, int s2, int tam, string s){
 
-  vector<int> freq(256,0);
+  vector<int> freq(26,0);
 
   for(int i = 0; i < tam; i++){
-    freq[(unsigned int)(s[s1+i])]++;
-    freq[(unsigned int)(s[s2+i])]--;
+    freq[(unsigned int)(s[s1+i] - 'a')]++;
+    freq[(unsigned int)(s[s2+i] - 'a')]--;
   }
 
-  for(int i = 0; i < 256; i++)
+  for(int i = 0; i < 26; i++)
     if(freq[i] != 0)
       return false;
 
