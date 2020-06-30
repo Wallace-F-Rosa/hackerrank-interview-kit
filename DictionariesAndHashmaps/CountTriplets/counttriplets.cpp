@@ -12,21 +12,18 @@ long countTriplets(vector<long> arr, long r) {
   unordered_map<long, long> dict;
   long triplets = 0;
   for(int i = 0; i < n; i++)
-    dict[arr[i]]=i;
+    if(dict.count(arr[i]) == 0)
+      dict[arr[i]]=i;
 
-  for(int i = 0; i < n-2; i++){
-    //visited[i] = true;
-    for(int j = i+1; j < n-1 && !(arr[j] > arr[i] * r); j++){
-      if(arr[j] == arr[i] * r){
-        for(int k = j+1; k < n && !(arr[k] > arr[j]*r); k++){
-          if(arr[k] == arr[j] * r){
-              triplets++;
-          }
+  for(int i = 0; i < n-2; i++)
+    if(dict[arr[i]*r]){
+      for(int j = dict[arr[i]*r]; dict[arr[j]] && (j > i) && (arr[j] == arr[i]*r); j--)
+        if(dict[arr[j]*r]){
+          for(int k = dict[arr[j]*r]; dict[arr[k]] && (k > j) && (arr[k] == arr[j]*r); k--)
+            triplets++;
         }
-      }
     }
-  }
-
+  
   return triplets;
 }
 
