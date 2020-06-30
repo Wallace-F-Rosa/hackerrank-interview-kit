@@ -9,19 +9,18 @@ vector<string> split(const string &);
 // Complete the countTriplets function below.
 long countTriplets(vector<long> arr, long r) {
   long n = arr.size();
+  unordered_map<long, long> dict;
   long triplets = 0;
-  bool visited[n] = {false};
+  for(int i = 0; i < n; i++)
+    dict[arr[i]]=i;
+
   for(int i = 0; i < n-2; i++){
-    visited[i] = true;
-    for(int j = i+1; j < n-1; j++){
-      if(!visited[j]){
-        visited[j] = true;
-        for(int k = j+1; j < n; j++){
-          if(!visited[k]){
-            visited[k] = true;
-            if(arr[k])
-            if(arr[j]/arr[i] != r) break;
-            if(arr[k]/arr[j] == r) triplets++;
+    //visited[i] = true;
+    for(int j = i+1; j < n-1 && !(arr[j] > arr[i] * r); j++){
+      if(arr[j] == arr[i] * r){
+        for(int k = j+1; k < n && !(arr[k] > arr[j]*r); k++){
+          if(arr[k] == arr[j] * r){
+              triplets++;
           }
         }
       }
@@ -33,8 +32,8 @@ long countTriplets(vector<long> arr, long r) {
 
 int main()
 {
-    ofstream fout(getenv("OUTPUT_PATH"));
-
+    //ofstream fout(getenv("OUTPUT_PATH"));
+    ofstream fout;
     string nr_temp;
     getline(cin, nr_temp);
 
@@ -58,10 +57,9 @@ int main()
     }
 
     long ans = countTriplets(arr, r);
+    cout << ans << "\n";
 
-    fout << ans << "\n";
-
-    fout.close();
+    //fout.close();
 
     return 0;
 }
