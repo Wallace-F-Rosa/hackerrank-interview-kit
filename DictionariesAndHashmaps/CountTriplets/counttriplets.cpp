@@ -9,21 +9,38 @@ vector<string> split(const string &);
 // Complete the countTriplets function below.
 long countTriplets(vector<long> arr, long r) {
   long n = arr.size();
-  unordered_map<long, long> dict;
-  long triplets = 0;
-  for(int i = 0; i < n; i++)
-    if(dict.count(arr[i]) == 0)
-      dict[arr[i]]=i;
 
-  for(int i = 0; i < n-2; i++)
-    if(dict[arr[i]*r]){
-      for(int j = dict[arr[i]*r]; dict[arr[j]] && (j > i) && (arr[j] == arr[i]*r); j--)
-        if(dict[arr[j]*r]){
-          for(int k = dict[arr[j]*r]; dict[arr[k]] && (k > j) && (arr[k] == arr[j]*r); k--)
-            triplets++;
-        }
-    }
+  unordered_map<long, long> left, right;
+  long triplets = 0;
   
+  //intead off loking for i,j and k so that arr[j] == arr[i]*r
+  //and arr[k] == arr[j]*r
+  //we look for j so that arr[i] == arr[j]/k and arr[k] == arr[j]*r
+  //so for every position in the array we will look:
+  //how many elements arr[j]*r exists with an index greater than j
+  // - we will store the frequency of the values with index greater or equal to j in unordered_map right
+  //how many elements arr[j]/k exists with an index less than j
+  // - we will store the frequency off this values with index less than j in unordered_map left
+  
+  //all elements start on the right side
+  //because if we iterate from left to right in the array arr
+  //the first element doesn't have any counterpart with an index less then it's own index.
+  for(int i = 0; i < n; i++)
+    right[arr[i]]++;
+  
+  //iterating in the array from left to right
+  for(int i = 0; i < n; i++){
+    //decrease the frequency off arr[i] in right
+    //because we will use right to know how many elements arr[j]*r with greater index than i there are in arr.
+    right[arr[i]]--;
+
+    //the amount of triplets is the combination off elements 
+    if(arr[i]%r == 0)
+      triplets += right[arr[i]*r]*left[arr[i]/r];
+    
+    left[arr[i]]++;
+  }
+
   return triplets;
 }
 
